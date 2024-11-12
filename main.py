@@ -1,4 +1,5 @@
 from algorithms.generationAlgs import *
+from algorithms.solvingAlgs import *
 from maze.Maze import *
 from window import *
 
@@ -10,7 +11,10 @@ if __name__ == '__main__':
     mazeGrid[len(mazeGrid) - 1].finish = True
     currCell = mazeGrid[0]
     visitedCells = [currCell]
+    visitation = [currCell]
     generation = False
+    solved = False
+
 
     # Application loop
     runWin: bool = True
@@ -20,8 +24,8 @@ if __name__ == '__main__':
 
         # Drawing a display and a grid
         WIN.fill((220, 220, 220))
-        for i in mazeGrid:
-            i.drawMaze()
+        for cell in mazeGrid:
+            cell.drawMaze()
 
         # Events and keyboard handling
         for event in pg.event.get():
@@ -31,13 +35,23 @@ if __name__ == '__main__':
                 # Maze generation
                 if event.key == pg.K_g:
                     generation = True
+                if event.key == pg.K_s:
+                    generation = False
+                    solved = True
+                    currCell = mazeGrid[0]
+                    path = BFS.pathFinding(mazeGrid, visitation)
 
+        if solved:
+            for cell in path:
+                pg.draw.rect(WIN, (70, 255, 70), (cell.x * cellSize + 26, cell.y * cellSize + 26, cellSize - 1, cellSize - 1))
+            pg.draw.rect(WIN, (70, 70, 255), (mazeGrid[0].x * cellSize + 26, mazeGrid[0].y * cellSize + 26, cellSize - 1, cellSize - 1))
+            pg.draw.rect(WIN, (70, 70, 255), (mazeGrid[-1].x * cellSize + 26, mazeGrid[-1].y * cellSize + 26, cellSize - 1, cellSize - 1))
 
         if generation:
             currCell = DFS.mazeGeneration(currCell, mazeGrid, visitedCells)
+            # Animating generation
+            DFS.drawGeneration(currCell)
 
-        # Animating generation
-        DFS.drawGeneration(currCell)
         pg.display.update()
 
     pg.quit()

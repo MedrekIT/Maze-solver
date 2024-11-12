@@ -50,7 +50,7 @@ class DFS:
     # Coloring active cell to get animation effect
     @staticmethod
     def drawGeneration(currCell):
-        pg.draw.rect(WIN, (255, 0, 0), (currCell.x * cellSize + 25, currCell.y * cellSize + 25, cellSize, cellSize))
+        pg.draw.rect(WIN, (255, 70, 70), (currCell.x * cellSize + 25, currCell.y * cellSize + 25, cellSize, cellSize))
 
     # Going through whole algorithm for current cell
     @staticmethod
