@@ -1,17 +1,17 @@
 from maze.Maze import *
+from algorithms.generationAlgs import *
 
+# Breadth first search maze solving algorithm
+# Methods are static to avoid 'self'
 class BFS:
-    @staticmethod
-    def checkCell(x, y, mazeGrid):
-        return None if x < 0 or x > cols - 1 or y < 0 or y > rows - 1 else mazeGrid[x + y * cols]
-
+    # Similar to DFS method in generationAlgs, but here we check if there is a path to a neighbor
     @staticmethod
     def checkNeighbors(currCell, mazeGrid):
         neighbors = []
-        top = BFS.checkCell(currCell.x, currCell.y - 1, mazeGrid)
-        bottom = BFS.checkCell(currCell.x, currCell.y + 1, mazeGrid)
-        left = BFS.checkCell(currCell.x - 1, currCell.y, mazeGrid)
-        right = BFS.checkCell(currCell.x + 1, currCell.y, mazeGrid)
+        top = DFS.checkCell(currCell.x, currCell.y - 1, mazeGrid)
+        bottom = DFS.checkCell(currCell.x, currCell.y + 1, mazeGrid)
+        left = DFS.checkCell(currCell.x - 1, currCell.y, mazeGrid)
+        right = DFS.checkCell(currCell.x + 1, currCell.y, mazeGrid)
 
         if top and not currCell.walls['top']:
             neighbors.append(top)
@@ -24,12 +24,14 @@ class BFS:
 
         return neighbors
 
+    # Algorithm which goes through cells, remembers path to certain cell, and seeks for finishing cell
     @staticmethod
     def pathFinding(mazeGrid, visited: list):
         cellsQueue: list = [mazeGrid[0]]
         cameFrom = {mazeGrid[0]: None}
         path = []
 
+        # Loop goes until it finds finish, if some cell is a dead end, algorithm continues for another cells
         while len(cellsQueue) > 0:
             visitedCell = cellsQueue.pop(0)
             if visitedCell.finish:
@@ -38,12 +40,12 @@ class BFS:
                     visitedCell = cameFrom[visitedCell]
 
                 for cell in path:
-                    pg.draw.rect(WIN, (70, 255, 70), (cell.x * cellSize + 26, cell.y * cellSize + 26, cellSize - 1, cellSize - 1))
+                    drawCell(cell, (70, 255, 70))
                     pg.display.update()
                 break
 
             for cell in visited:
-                pg.draw.rect(WIN, (255, 255, 255), (cell.x * cellSize + 26, cell.y * cellSize + 26, cellSize - 1, cellSize - 1))
+                drawCell(cell, (255, 255, 255))
                 pg.display.update()
 
             neighbors = BFS.checkNeighbors(visitedCell, mazeGrid)
@@ -52,9 +54,9 @@ class BFS:
                     cellsQueue.append(neighbor)
                     visited.append(neighbor)
                     cameFrom[neighbor] = visitedCell
-                    pg.draw.rect(WIN, (255, 70, 70), (neighbor.x * cellSize + 26, neighbor.y * cellSize + 26, cellSize - 1, cellSize - 1))
+                    drawCell(neighbor, (255, 70, 70))
 
-            pg.draw.rect(WIN, (255, 255, 70), (visitedCell.x * cellSize + 26, visitedCell.y * cellSize + 26, cellSize - 1, cellSize - 1))
+            drawCell(visitedCell, (255, 255, 70))
             pg.display.update()
 
         return path

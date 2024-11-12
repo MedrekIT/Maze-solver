@@ -37,9 +37,8 @@ if __name__ == '__main__':
                     generation = True
                 if event.key == pg.K_s:
                     generation = False
-                    solved = True
-                    currCell = mazeGrid[0]
                     path = BFS.pathFinding(mazeGrid, visitation)
+                    solved = True
 
         if solved:
             for cell in path:
@@ -50,7 +49,7 @@ if __name__ == '__main__':
         if generation:
             currCell = DFS.mazeGeneration(currCell, mazeGrid, visitedCells)
             # Animating generation
-            DFS.drawGeneration(currCell)
+            drawCell(currCell, (255, 70, 70))
 
         pg.display.update()
 

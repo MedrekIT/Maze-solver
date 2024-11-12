@@ -1,6 +1,10 @@
 from maze.Maze import *
 import random as rd
 
+# Coloring active cell to get animation effect
+def drawCell(currCell, color):
+    pg.draw.rect(WIN, color, (currCell.x * cellSize + 26, currCell.y * cellSize + 26, cellSize - 1, cellSize - 1))
+
 # Depth first search maze generating algorithm
 # Methods are static to avoid 'self'
 class DFS:
@@ -46,11 +50,6 @@ class DFS:
         if dy == -1:
             currCell.walls['bottom'] = False
             nextCell.walls['top'] = False
-
-    # Coloring active cell to get animation effect
-    @staticmethod
-    def drawGeneration(currCell):
-        pg.draw.rect(WIN, (255, 70, 70), (currCell.x * cellSize + 25, currCell.y * cellSize + 25, cellSize, cellSize))
 
     # Going through whole algorithm for current cell
     @staticmethod
