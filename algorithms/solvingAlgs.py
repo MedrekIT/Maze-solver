@@ -1,4 +1,3 @@
-from maze.Maze import *
 from algorithms.generationAlgs import *
 
 # Breadth first search maze solving algorithm
@@ -26,10 +25,9 @@ class BFS:
 
     # Algorithm which goes through cells, remembers path to certain cell, and seeks for finishing cell
     @staticmethod
-    def pathFinding(mazeGrid, visited: list):
+    def pathFinding(mazeGrid, visited: list, path: list):
         cellsQueue: list = [mazeGrid[0]]
         cameFrom = {mazeGrid[0]: None}
-        path = []
 
         # Loop goes until it finds finish, if some cell is a dead end, algorithm continues for another cells
         while len(cellsQueue) > 0:

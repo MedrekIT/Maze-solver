@@ -1,4 +1,3 @@
-from algorithms.generationAlgs import *
 from algorithms.solvingAlgs import *
 from maze.Maze import *
 from window import *
@@ -12,6 +11,7 @@ if __name__ == '__main__':
     currCell = mazeGrid[0]
     visitedCells = [currCell]
     visitation = [currCell]
+    path = []
     generation = False
     solved = False
 
@@ -35,9 +35,21 @@ if __name__ == '__main__':
                 # Maze generation
                 if event.key == pg.K_g:
                     generation = True
-                if event.key == pg.K_s:
-                    generation = False
-                    path = BFS.pathFinding(mazeGrid, visitation)
+                # Grid regeneration
+                if event.key == pg.K_r:
+                    mazeGrid = Maze().grid
+                    mazeGrid[0].start = True
+                    mazeGrid[0].visited = True
+                    mazeGrid[len(mazeGrid) - 1].finish = True
+                    currCell = mazeGrid[0]
+                    visitedCells = [currCell]
+                    visitation = [currCell]
+                    path = []
+                    generation = True
+                    solvig = False
+                # Maze solving
+                if event.key == pg.K_s and not generation:
+                    path = BFS.pathFinding(mazeGrid, visitation, path)
                     solved = True
 
         if solved:
@@ -50,6 +62,7 @@ if __name__ == '__main__':
             currCell = DFS.mazeGeneration(currCell, mazeGrid, visitedCells)
             # Animating generation
             drawCell(currCell, (255, 70, 70))
+            if currCell.x == 0 and currCell.y == 0: generation = False
 
         pg.display.update()
 
